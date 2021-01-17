@@ -7,11 +7,11 @@ import { BaseEntityModel } from '../interfaces';
 
 export abstract class AbstractEntity implements BaseEntityModel {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt?: Date;
 }
