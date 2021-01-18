@@ -1,9 +1,6 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CityEntity,
-  WeatherEntity,
-} from '../../../typeorm';
+import { CityEntity, WeatherEntity } from '../../../typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '../../../modules/shared';
 import * as dayjs from 'dayjs';
@@ -25,7 +22,14 @@ export class WeatherService {
     private configService: ConfigService,
   ) {}
 
-  async getForecast(cityName: string, date?: string) {
+  async getForecast(
+    cityName: string,
+    date?: string,
+  ): Promise<{
+    dateForecast: WeatherEntity[];
+    todayForecast: WeatherEntity[];
+    yesterdayForecast: WeatherEntity[];
+  }> {
     const city = await IsEntityExist<CityEntity>(this.cityRepository, {
       name: cityName,
     });
@@ -48,7 +52,10 @@ export class WeatherService {
     return { dateForecast, todayForecast, yesterdayForecast };
   }
 
-  private async getForecastByDate(city: CityEntity, date: string) {
+  private async getForecastByDate(
+    city: CityEntity,
+    date: string,
+  ): Promise<WeatherEntity[]> {
     if (date) {
       const forecasts = await this.weatherRepository.find({
         city,
@@ -59,7 +66,7 @@ export class WeatherService {
     }
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_12_HOURS)
   //@Cron(CronExpression.EVERY_MINUTE)
   async load(): Promise<WeatherEntity[]> {
     const requestObjects = await this.prepareRequestObjects();
