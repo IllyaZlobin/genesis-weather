@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { WeatherValidationSchemas } from 'src/modules/weather/weatherValidation.schemas';
+import { WeatherValidationSchemas } from '../modules/weather/weatherValidation.schemas';
 import { JoiValidationPipe } from '../core';
 
 export const setupPipes = async (app: INestApplication) => {
