@@ -17,7 +17,7 @@ async function bootstrap() {
   setupInterceptors(app);
   setupSwagger(app, 'Genesis. Weather API', 'Apis', '1.0.0');
 
-  const port = config.get('PORT') || 3000;
+  const port = process.env.PORT || 3000;
   const env = config.nodeEnv;
 
   console.log(`APP RUN ON ${port}, ENV: ${env}`);
