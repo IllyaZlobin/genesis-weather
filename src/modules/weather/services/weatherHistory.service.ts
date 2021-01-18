@@ -16,7 +16,7 @@ export class WeatherHistoryService {
       .select('COUNT(weather_history.city)', 'total')
       .addSelect('weather_history.city', 'city')
       .groupBy('weather_history.city')
-      .having('COUNT(weather_history.city) > 1')
+      .having('COUNT(weather_history.city) > 0')
       .orderBy('total', 'DESC')
       .execute()) as { city: string; total: number }[];
 
