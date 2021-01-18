@@ -1,7 +1,7 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CityEntity, WeatherEntity } from '../../../typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { ConfigService } from '../../../modules/shared';
 import * as dayjs from 'dayjs';
 import {
@@ -64,6 +64,32 @@ export class WeatherService {
 
       return forecasts;
     }
+  }
+
+  async getAverageTemp(cityName: string, days: number) {
+    const city = await IsEntityExist<CityEntity>(this.cityRepository, {
+      name: cityName,
+    });
+    const forecasts = await this.weatherRepository.find({
+      where: {
+        dt:
+          days > 0
+            ? Between(
+                dayjs()
+                  .subtract(days, 'day')
+                  .format('YYYY-MM-DD'),
+                dayjs().format('YYYY-MM-DD'),
+              )
+            : dayjs().format('YYYY-MM-DD'),
+        city,
+      },
+    });
+
+    const average =
+      forecasts.map(x => x.avg_temp).reduce((acc, curr) => acc + curr, 0) /
+      forecasts.length;
+
+    return average;
   }
 
   @Cron(CronExpression.EVERY_12_HOURS)
