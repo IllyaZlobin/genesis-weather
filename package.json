@@ -11,8 +11,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "heroku-postbuild": "npm run build && npm run db:generate:dev",
     "start": "nest start",
-    "start:local": "nest start --watch",
-    "start:dev": "export env=dev && node dist/main",
+    "start:local": "cross-env env=local && nest start --watch",
+    "start:dev": "cross-env env=dev && node dist/main",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -30,7 +30,7 @@
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/typeorm/ormConfig.ts",
     "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop -f src/typeorm/ormConfig.ts",
     "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync -f src/typeorm/ormConfig.ts",
-    "db:generate:dev": "export ENV=dev && npm run schema:drop && npm run migration:run && npm run seed:run"
+    "db:generate:dev": "cross-env env=dev && npm run schema:drop && npm run migration:run && npm run seed:run"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -41,6 +41,7 @@
     "@nestjs/schedule": "^0.4.1",
     "@nestjs/swagger": "^4.7.11",
     "@nestjs/typeorm": "^7.1.5",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.10.3",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
