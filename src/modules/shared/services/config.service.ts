@@ -46,6 +46,7 @@ export class ConfigService {
       database: this.get('db_name'),
       synchronize: false,
       logger: 'simple-console',
+      keepConnectionAlive: true,
       entities: DatabaseEntities,
       migrationsTableName: 'custom_migration_table',
       migrations: ['dist/typeorm/migrations/**/*{.ts,.js}'],
