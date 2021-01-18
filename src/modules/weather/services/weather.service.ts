@@ -93,7 +93,6 @@ export class WeatherService {
   }
 
   @Cron(CronExpression.EVERY_12_HOURS)
-  //@Cron(CronExpression.EVERY_MINUTE)
   async load(): Promise<WeatherEntity[]> {
     const requestObjects = await this.prepareRequestObjects();
     const forecasts: WeatherEntity[] = [];
@@ -129,12 +128,12 @@ export class WeatherService {
     return result;
   }
 
-  async saveMany(forecasts: WeatherEntity[]): Promise<WeatherEntity[]> {
+  private async saveMany(forecasts: WeatherEntity[]): Promise<WeatherEntity[]> {
     const result = await this.weatherRepository.save(forecasts);
     return result;
   }
 
-  async deleteMany(): Promise<void> {
+  private async deleteMany(): Promise<void> {
     const weathers = await this.weatherRepository.find();
     await this.weatherRepository.remove(weathers);
   }
@@ -204,7 +203,7 @@ export class WeatherService {
    *
    * @param hourlyForecast Object -  hourly forecast response from the api
    */
-  async calculateAvgTemp(
+  private async calculateAvgTemp(
     hourlyForecast: ApiHourlyForecastResponse[],
   ): Promise<number> {
     const avg_temp =
