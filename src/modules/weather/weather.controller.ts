@@ -4,6 +4,7 @@ import { GetForecastByDateRequest } from './dto/getByDate/getByDate.request';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetMostSearchableCityResponse } from './dto/getSearchableCity/getSearchableCity.response';
 import { WeatherHistoryService } from './services/weatherHistory.service';
+import { GetForecastByDateResponse } from './dto/getByDate/getByDate.response';
 
 @Controller('weather')
 @ApiTags('weather')
@@ -15,14 +16,26 @@ export class WeatherController {
 
   @Get('/')
   @ApiOperation({
-    description:
+    summary:
       'Get forecast info for selected day and city. Available dates between today and 4 days before',
   })
-  async getForecastByDate(@Query() model: GetForecastByDateRequest) {
-    const response = await this.weatherService.getForecast(
-      model.city,
-      model.date,
+  async getForecastByDate(
+    @Query() model: GetForecastByDateRequest,
+  ): Promise<GetForecastByDateResponse> {
+    const { city, date } = model;
+
+    const {
+      dateForecast,
+      todayForecast,
+      yesterdayForecast,
+    } = await this.weatherService.getForecast(city, date);
+
+    const response = new GetForecastByDateResponse(
+      dateForecast,
+      todayForecast,
+      yesterdayForecast,
     );
+
     return response;
   }
 
@@ -39,5 +52,14 @@ export class WeatherController {
     } = await this.weatherHistoryService.getMostSearchableCity();
     const response = new GetMostSearchableCityResponse(city, total);
     return response;
+  }
+
+  @Get('/load')
+  @ApiOperation({
+    summary:
+      'Load forecast information from external api and save into database. This endpoint runs automatic every 12 hours',
+  })
+  async load() {
+    await this.weatherService.load();
   }
 }
