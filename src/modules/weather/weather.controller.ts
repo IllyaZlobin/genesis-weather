@@ -68,13 +68,4 @@ export class WeatherController {
     const response = new GetAverageTempResponse(average_temp);
     return response;
   }
-
-  @Get('/load')
-  @ApiOperation({
-    summary:
-      'Load forecast information from external api and save into database. This endpoint runs automatic every 12 hours',
-  })
-  async load() {
-    await this.weatherService.load();
-  }
 }
