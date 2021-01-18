@@ -22,6 +22,6 @@ async function bootstrap() {
 
   console.log(`APP RUN ON ${port}, ENV: ${env}`);
 
-  await app.listen(3000);
+  await app.listen(port);
 }
 bootstrap();
