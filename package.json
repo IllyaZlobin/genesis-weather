@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "npm run build && npm run db:generate:dev",
     "start": "nest start",
     "start:local": "nest start --watch",
     "start:dev": "export env=dev && node dist/main",
@@ -27,7 +27,10 @@
     "migration:run": "npm run typeorm migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/typeorm/ormConfig.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/typeorm/ormConfig.ts"
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/typeorm/ormConfig.ts",
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop -f src/typeorm/ormConfig.ts",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync -f src/typeorm/ormConfig.ts",
+    "db:generate:dev": "export ENV=dev && npm run schema:drop && npm run migration:run && npm run seed:run"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
