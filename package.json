@@ -20,7 +20,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --config ./test/jest-e2e.json --forceExit",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/typeorm/ormConfig.ts",
     "migration:create": "npm run typeorm migration:create -- -n",
     "migration:generate": "npm run typeorm migration:generate -- -n",
@@ -30,7 +30,8 @@
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n src/typeorm/ormConfig.ts",
     "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop -f src/typeorm/ormConfig.ts",
     "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync -f src/typeorm/ormConfig.ts",
-    "db:generate:dev": "cross-env env=dev && npm run schema:drop && npm run migration:run && npm run seed:run"
+    "db:generate:dev": "cross-env env=dev && npm run schema:drop && npm run migration:run && npm run seed:run",
+    "db:generate:local": "cross-env env=local && npm run schema:drop && npm run migration:run && npm run seed:run"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -54,7 +55,7 @@
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
-    "@nestjs/testing": "^7.0.0",
+    "@nestjs/testing": "^7.6.5",
     "@types/cron": "^1.7.2",
     "@types/express": "^4.17.3",
     "@types/hapi__joi": "^17.1.6",
@@ -63,6 +64,7 @@
     "@types/supertest": "^2.0.8",
     "@typescript-eslint/eslint-plugin": "3.9.1",
     "@typescript-eslint/parser": "3.9.1",
+    "chai": "^4.2.0",
     "eslint": "7.7.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
